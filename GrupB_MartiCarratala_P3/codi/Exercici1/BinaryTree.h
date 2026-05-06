@@ -21,7 +21,8 @@ public:
     void printPreOrder(const Position<Key, Value> *node = nullptr) const;
     void printPostOrder(const Position<Key, Value> *node = nullptr) const;
     bool identicalTree(const BinaryTree<Key, Value>& other) const;
-    Position<Key, Value>* search(const Key& key) const;
+    Position<Key, Value>* search(const Key& key) const
+vector<Key> getLeaves() const; // NOU METODE FER A LA PRACTICA
     
 protected:
     Position<Key, Value>* root;
@@ -30,6 +31,7 @@ private:
 
     Position<Key, Value>* searchRec(Position<Key, Value>* node, const Key& key) const;
     bool identicalRec(Position<Key, Value>* a, Position<Key, Value>* b) const;
+void getLeavesAux(Position<Key,Value>* node, vector<Key>& leaves) const;
 };
 
 template <class Key, class Value>
@@ -230,5 +232,24 @@ bool BinaryTree<Key, Value>::identicalRec(Position<Key, Value>* a, Position<Key,
 
     return identicalRec(a->getLeft(), b->getLeft()) && identicalRec(a->getRight(), b->getRight());
 }
+
+template <class Key, class Value>
+void BinaryTree<Key,Value>::getLeavesAux(Position<Key,Value>* node, vector<Key>& leaves) const {
+    if (node == nullptr) return;
+    if (node->isLeaf()) {
+        leaves.push_back(node->getKey());  // guardamos la KEY no el nodo
+    } else {
+        getLeavesAux(node->getLeft(), leaves);
+        getLeavesAux(node->getRight(), leaves);
+    }
+}
+
+template <class Key, class Value>
+vector<Key> BinaryTree<Key,Value>::getLeaves() const {
+    vector<Key> leaves;
+    getLeavesAux(root, leaves);
+    return leaves;
+}
+
 
 #endif
